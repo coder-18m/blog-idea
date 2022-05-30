@@ -1,0 +1,30 @@
+version: "3.3"
+networks:
+  backend-network:
+services:
+  blog-app:
+    container_name: "blog_app"
+    restart: "always"
+    # depends_on:
+    #   - "blog-admin-app"
+    build:
+      context: ..
+      dockerfile: SimplisticBlogger/blog/Dockerfile
+    env_file: ".env"
+    ports:
+      - "9010:${FLASK_BLOG_PORT}"
+    networks:
+      - "backend-network"
+  blog-admin-app:
+    container_name: "blog_admin"
+    restart: "always"
+    # depends_on:
+    #   - "mysql_db"
+    build:
+      context: ..
+      dockerfile: SimplisticBlogger/blog_admin/Dockerfile
+    env_file: ".env"
+    ports:
+      - "9000:${FLASK_ADMIN_PORT}"
+    networks:
+      - "backend-network"
